@@ -1,0 +1,79 @@
+<div class="grid d-flex justify-content-center align-items-center pt-5">
+  <div class="col-12 md:col-6">
+    <div class="card p-fluid">
+      <h5>Form Builder</h5>
+      <form [formGroup]="formGroup">
+        <div class="field">
+          <label for="header">Header</label>
+          <input pInputText id="header" type="text" formControlName="header" />
+        </div>
+        <div class="field">
+          <label for="key">Key</label>
+          <input pInputText id="key" type="text" formControlName="key" [disabled]="true" />
+        </div>
+      <div class="card p-fluid">
+        <h5>Add Custom Control</h5>
+        <div class="field">
+          <label for="controlKey">Control Key</label>
+          <input pInputText id="controlKey" type="text" [(ngModel)]="newControl.key" [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div class="field">
+          <label for="controlLabel">Control Label</label>
+          <input pInputText id="controlLabel" type="text" [(ngModel)]="newControl.label" [ngModelOptions]="{standalone: true}" />
+        </div>
+        <div class="field">
+          <label for="controlType">Control Type</label>
+          <p-dropdown [options]="controlTypes" [(ngModel)]="newControl.type" [ngModelOptions]="{standalone: true}"></p-dropdown>
+        </div>
+        <div class="field-checkbox">
+          <p-checkbox [(ngModel)]="newControl.required" [ngModelOptions]="{standalone: true}"  binary="true"></p-checkbox>
+          <label for="required">Required</label>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-content-end">
+          <p-button label="Add Control" (onClick)="addCustomControl()"></p-button>
+        </div>
+      </div>
+
+
+      <div class="flex flex-wrap gap-2" pDroppable (onDrop)="onDrop($event)" (onDragOver)="onDragOver($event)">
+        <!-- Draggable controls -->
+        <div *ngFor="let control of dynamicControls; let i = index" pDraggable
+             (onDragStart)="onDragStart(i)" (onDragEnd)="onDragEnd()" class="flex-item">
+          <div class="field small-card">
+            <label for="{{control.key}}">{{control.label}}</label>
+            <input *ngIf="control.type === 'Numeric'"
+            pInputText [formControlName]="control.key"
+            [required]="control.required"
+            type="number"
+            [ngClass]="{'ng-invalid ng-dirty': control.required}" />
+
+     <input *ngIf="control.type === 'Date'"
+            pInputText [formControlName]="control.key"
+            [required]="control.required"
+            type="date"
+            [ngClass]="{'ng-invalid ng-dirty': control.required}" />
+
+     <input *ngIf="control.type === 'Text'"
+            pInputText [formControlName]="control.key"
+            [required]="control.required"
+            type="text"
+            [ngClass]="{'ng-invalid ng-dirty': control.required}" />
+            <div class="drag-handle">
+              <i class="pi pi-bars"></i>
+              <i class="pi pi-trash" (click)="removeControl(i)"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+    <div class="flex flex-wrap gap-2 justify-content-end justify-end">
+      <p-button  [label]="model?.id ? 'Update' : 'Save'"
+      [loading]="loading()"
+      [disabled]="!formGroup.valid" (onClick)="onSave()"></p-button>
+    </div>
+    </div>
+
+  </div>
+</div>
+<p-toast></p-toast>
