@@ -1,0 +1,89 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Trending Coder Accuracy Dashboard</h1>
+    <div class="dashboard-actions">
+      <p-button 
+        label="Refresh" 
+        icon="pi pi-refresh" 
+        class="p-button-outlined"
+        (onClick)="refreshChart()">
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Error Messages -->
+  <p-messages></p-messages>
+
+  <!-- Main Chart Card -->
+  <p-card header="Coder Accuracy Trends" class="chart-card">
+    <div class="chart-container" *ngIf="showChart && chartData">
+      <p-chart 
+        type="line" 
+        [data]="chartData" 
+        [options]="chartOptions"
+        width="100%"
+        height="400px">
+      </p-chart>
+    </div>
+
+    <!-- Fallback for No Data -->
+    <div class="no-data-fallback" *ngIf="!showChart && noDataMessage">
+      <div class="fallback-content">
+        <i class="pi pi-chart-line fallback-icon"></i>
+        <h3>No Chart Data Available</h3>
+        <p>{{ noDataMessage }}</p>
+        <p-button 
+          label="Try Again" 
+          icon="pi pi-refresh" 
+          class="p-button-outlined"
+          (onClick)="refreshChart()">
+        </p-button>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="!showChart && errorMessage">
+      <div class="error-content">
+        <i class="pi pi-exclamation-triangle error-icon"></i>
+        <h3>Chart Rendering Error</h3>
+        <p>{{ errorMessage }}</p>
+        <p-button 
+          label="Retry" 
+          icon="pi pi-refresh" 
+          class="p-button-danger p-button-outlined"
+          (onClick)="refreshChart()">
+        </p-button>
+      </div>
+    </div>
+  </p-card>
+
+  <!-- Test Controls (for demonstration) -->
+  <p-card header="Test Data Scenarios" class="test-controls-card">
+    <div class="test-buttons">
+      <p-button 
+        label="Test Normal Data" 
+        icon="pi pi-check-circle" 
+        class="p-button-success p-button-sm"
+        (onClick)="testNormalData()">
+      </p-button>
+      
+      <p-button 
+        label="Test Sparse Data" 
+        icon="pi pi-exclamation-circle" 
+        class="p-button-warning p-button-sm"
+        (onClick)="testSparseData()">
+      </p-button>
+      
+      <p-button 
+        label="Test Empty Data" 
+        icon="pi pi-times-circle" 
+        class="p-button-danger p-button-sm"
+        (onClick)="testEmptyData()">
+      </p-button>
+    </div>
+    
+    <p class="test-description">
+      Use these buttons to test different data scenarios and validate the chart rendering functionality.
+    </p>
+  </p-card>
+</div>
